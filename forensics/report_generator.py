@@ -101,8 +101,9 @@ def _list_to_csv(items: list[dict]) -> str:
     """Convert a list of dicts to CSV string."""
     if not items:
         return ""
+    fieldnames = list(dict.fromkeys(k for item in items for k in item.keys()))
     buf = io.StringIO()
-    writer = csv.DictWriter(buf, fieldnames=items[0].keys())
+    writer = csv.DictWriter(buf, fieldnames=fieldnames, extrasaction="ignore")
     writer.writeheader()
     for row in items:
         writer.writerow(row)

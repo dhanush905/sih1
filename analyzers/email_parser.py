@@ -153,7 +153,7 @@ def parse_email(raw: bytes | str) -> ParsedEmail:
     # URLs from text + html
     urls = set()
     for u in _URL_RE.findall(body_text or ""):
-        urls.add(u.rstrip(".,);]"))
+        urls.add(u.rstrip(".,);]>\"'"))
     for u in _extract_html_urls(body_html or ""):
         urls.add(u)
     parsed.urls = sorted(urls)

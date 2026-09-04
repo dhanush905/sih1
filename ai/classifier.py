@@ -188,12 +188,12 @@ def _model_explanation(features: dict) -> list[str]:
         reasons.append("Reply-To mismatch")
     if features.get("has_ip_url"):
         reasons.append("IP-based URL")
-    if features.get("num_suspicious_urls"):
+    if features.get("num_suspicious_urls", 0) > 0:
         reasons.append(f"{features['num_suspicious_urls']} suspicious URL(s)")
     if features.get("dangerous_attachment"):
         reasons.append("Dangerous attachment")
     if features.get("urgency_in_body"):
         reasons.append("Urgency language in body")
-    if features.get("threat_intel_malicious"):
+    if features.get("threat_intel_malicious", 0) > 0:
         reasons.append("Threat intel: malicious")
     return reasons or ["No strong indicators"]

@@ -90,7 +90,7 @@ def _check_dkim(parsed: ParsedEmail) -> list[dict]:
                          "No DKIM signature present — email integrity not guaranteed.",
                          "DKIM-Signature absent")]
 
-    if "dkim=pass" in auth or "dkim=pass" in auth:
+    if "dkim=pass" in auth:
         results.append(_finding("DKIM pass", "INFO",
                                 "DKIM signature verified successfully.",
                                 "DKIM=pass"))
@@ -191,10 +191,12 @@ def _check_display_name_spoof(parsed: ParsedEmail) -> list[dict]:
         "fedex": {"fedex.com"},
     }
     for brand, legit_domains in brand_domains.items():
-        if brand in display and domain not in legit_domains:
-            return [_finding("Display-name spoofing", "HIGH",
-                             f"Display name '{display}' impersonates '{brand}' but the sender domain is '{domain}'.",
-                             f"Display='{display}'  Domain={domain}")]
+        if brand in display:
+            is_legit = any(domain == legit or domain.endswith("." + legit) for legit in legit_domains)
+            if not is_legit:
+                return [_finding("Display-name spoofing", "HIGH",
+                                 f"Display name '{display}' impersonates '{brand}' but the sender domain is '{domain}'.",
+                                 f"Display='{display}'  Domain={domain}")]
     return []
 
 

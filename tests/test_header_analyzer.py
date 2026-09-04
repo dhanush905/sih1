@@ -101,3 +101,17 @@ class TestHeaderAnalyzer:
         parsed = parse_email(SPF_FAIL_EML)
         findings = analyze_headers(parsed)
         assert any("display-name" in f["finding"].lower() for f in findings)
+
+    def test_display_name_spoof_subdomain_legit(self) -> None:
+        legit_eml = b"""From: "PayPal Security" <service@mail.paypal.com>
+To: user@example.com
+Subject: Notice
+Date: Mon, 15 Sep 2025 10:30:00 +0000
+Message-ID: <123@mail.paypal.com>
+Authentication-Results: mx.example.org; spf=pass; dkim=pass; dmarc=pass
+
+Notice body.
+"""
+        parsed = parse_email(legit_eml)
+        findings = analyze_headers(parsed)
+        assert not any("display-name" in f["finding"].lower() for f in findings)

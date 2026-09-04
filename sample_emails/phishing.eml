@@ -1,0 +1,24 @@
+From: "Apple Security" <noreply@apple-account-verify.xyz>
+To: victim@example.com
+Subject: URGENT: Your Apple ID has been suspended - Verify Now
+Date: Tue, 16 Sep 2025 14:22:00 +0000
+Message-ID: <susp-98765@mail.evil-server.xyz>
+MIME-Version: 1.0
+Content-Type: text/html; charset=utf-8
+Received: from mail.evil-server.xyz (mail.evil-server.xyz [45.142.14.92])
+  by mx.example.org with ESMTP; Tue, 16 Sep 2025 14:22:10 +0000
+Received: from [45.142.14.92] by relay.suspicious.net; Tue, 16 Sep 2025 14:21:55 +0000
+Authentication-Results: mx.example.org; spf=fail smtp.mailfrom=apple-account-verify.xyz;
+  dkim=fail; dmarc=fail header.from=apple-account-verify.xyz
+Return-Path: <bounce@mail.evil-server.xyz>
+Reply-To: <support@verify-account-security.tk>
+
+<html><body>
+<p>Dear Customer,</p>
+<p>We have detected unusual activity on your Apple ID account. Your account has been
+suspended for security reasons. You must verify your account immediately to avoid
+permanent deactivation.</p>
+<p><a href="http://apple-account-verify.xyz/login?token=abc123&redirect=secure">Click here to verify your account now</a></p>
+<p>If you do not confirm your information within 24 hours, your account will be permanently locked.</p>
+<p>Apple Security Team</p>
+</body></html>

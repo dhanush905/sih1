@@ -1,0 +1,28 @@
+From: sender@company.com
+To: recipient@example.org
+Subject: Q3 Project Update
+Date: Mon, 15 Sep 2025 10:30:00 +0000
+Message-ID: <q3update-12345@company.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Received: from mail.company.com (mail.company.com [192.168.1.10])
+  by mx.example.org with ESMTP id 1ABC23 for <recipient@example.org>;
+  Mon, 15 Sep 2025 10:30:05 +0000
+Received: from localhost (localhost [127.0.0.1])
+  by mail.company.com with ESMTP; Mon, 15 Sep 2025 10:30:00 +0000
+Authentication-Results: mx.example.org; spf=pass smtp.mailfrom=company.com;
+  dkim=pass header.d=company.com; dmarc=pass header.from=company.com
+Return-Path: <sender@company.com>
+Reply-To: <sender@company.com>
+
+Hi team,
+
+Just a quick update on the Q3 project. We are on track to deliver the
+initial milestone by the end of the month. The design review is scheduled
+for Friday at 2 PM.
+
+Please review the attached timeline and let me know if you have any
+questions.
+
+Best regards,
+The Project Team

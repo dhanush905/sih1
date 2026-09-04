@@ -1,0 +1,25 @@
+From: "Invoice Team" <billing@legitimate-corp.com>
+To: finance@example.com
+Subject: Invoice #INV-2025-0892 - Payment Required
+Date: Wed, 17 Sep 2025 09:15:00 +0000
+Message-ID: <inv0892@legitimate-corp.com>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="boundary123"
+
+--boundary123
+Content-Type: text/html; charset=utf-8
+
+<html><body>
+<p>Hello,</p>
+<p>Please find attached the invoice for your recent order. Kindly process the
+payment at your earliest convenience.</p>
+<p><a href="http://pay.legitimate-corp.com/secure-payment?invoice=0892">View invoice online</a></p>
+<p>Regards,<br>Billing Department</p>
+</body></html>
+
+--boundary123
+Content-Type: application/octet-stream; name="invoice_0892.pdf.exe"
+Content-Disposition: attachment; filename="invoice_0892.pdf.exe"
+
+ZmFrZSBtYWx3YXJlIHBheWxvYWQgLSBzeW50aGV0aWMgZm9yIGRlbW8gb25seQ==
+--boundary123--

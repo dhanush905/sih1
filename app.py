@@ -390,7 +390,7 @@ def run_analysis_pipeline(raw_email: bytes | str, investigation_id: str) -> None
             p = parse_email(raw_email)
             set("ip_results", analyze_ips(p.all_ips))
             domains = extract_domains(p.body_text or "") + extract_domains(p.body_html or "")
-            set("domain_results", analyze_domains(list(set(domains))))
+            set("domain_results", analyze_domains(list(dict.fromkeys(domains))))
         elif i == 5:
             _run_threat_intel()
         elif i == 6:
@@ -668,12 +668,15 @@ def main() -> None:
 # Handlers
 # ---------------------------------------------------------------------------
 def _handle_upload(raw: bytes | str) -> None:
-    inv_id = generate_investigation_id()
-    set("investigation_id", inv_id)
-    st.session_state["_raw_email"] = raw
-    set("demo_loaded", False)
-    run_analysis_pipeline(raw, inv_id)
-    st.rerun()
+    try:
+        inv_id = generate_investigation_id()
+        set("investigation_id", inv_id)
+        st.session_state["_raw_email"] = raw
+        set("demo_loaded", False)
+        run_analysis_pipeline(raw, inv_id)
+        st.rerun()
+    except Exception as e:
+        st.error(f"Analysis Pipeline Error: {e}")
 
 
 def _load_demo(filename: str) -> None:
@@ -681,14 +684,17 @@ def _load_demo(filename: str) -> None:
     if not path.exists():
         st.error(f"Sample file not found: {filename}")
         return
-    raw = path.read_bytes()
-    inv_id = generate_investigation_id()
-    set("investigation_id", inv_id)
-    set("demo_loaded", True)
-    set("current_demo", filename)
-    st.session_state["_raw_email"] = raw
-    run_analysis_pipeline(raw, inv_id)
-    st.rerun()
+    try:
+        raw = path.read_bytes()
+        inv_id = generate_investigation_id()
+        set("investigation_id", inv_id)
+        set("demo_loaded", True)
+        set("current_demo", filename)
+        st.session_state["_raw_email"] = raw
+        run_analysis_pipeline(raw, inv_id)
+        st.rerun()
+    except Exception as e:
+        st.error(f"Analysis Pipeline Error: {e}")
 
 
 # ---------------------------------------------------------------------------
@@ -745,13 +751,11 @@ def _render_dashboard() -> None:
     ]
     items_html = ""
     for s in steps:
-        items_html += f"""
-        <div class="progress-item">
-            <div class="progress-circle">✓</div>
-            <div class="progress-name">{s.replace(chr(10),'<br>')}</div>
-            <div class="progress-status">Completed</div>
-        </div>
-        """
+        items_html += f"""<div class="progress-item">
+<div class="progress-circle">✓</div>
+<div class="progress-name">{s.replace(chr(10),'<br>')}</div>
+<div class="progress-status">Completed</div>
+</div>"""
     st.markdown(f'<div class="progress-track">{items_html}</div>', unsafe_allow_html=True)
 
     st.divider()
@@ -903,6 +907,11 @@ def _risk_component_chart(risk: dict) -> None:
     names = [k.replace("_", " ").title() for k in components]
     weighted = [round(c.get("weighted", 0), 1) for c in components.values()]
     palette = ["#6366f1", "#3b82f6", "#10b981", "#f97316", "#ef4444", "#eab308", "#a855f7", "#06b6d4"]
+
+    if sum(weighted) == 0:
+        names = ["No Risk (Benign)"]
+        weighted = [1]
+        palette = ["#10b981"]
 
     fig = go.Figure(go.Pie(
         labels=names, values=weighted,

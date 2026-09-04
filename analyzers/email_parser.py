@@ -63,8 +63,8 @@ class ParsedEmail:
             "content_type": self.content_type,
             "body_text": self.body_text,
             "body_html": self.body_html,
-            "received_headers": self.received_headers,
-            "auth_headers": self.auth_headers,
+            "received_headers": [str(h) for h in self.received_headers],
+            "auth_headers": {str(k): str(v) for k, v in self.auth_headers.items()},
             "urls": self.urls,
             "attachments": [
                 {
@@ -119,9 +119,10 @@ def parse_email(raw: bytes | str) -> ParsedEmail:
     except Exception:
         pass
 
-    # received headers
+    # received headers — convert to plain strings
     try:
-        parsed.received_headers = msg.get_all("Received") or []
+        raw_received = msg.get_all("Received") or []
+        parsed.received_headers = [str(h) for h in raw_received]
     except Exception:
         parsed.received_headers = []
 
@@ -132,7 +133,7 @@ def parse_email(raw: bytes | str) -> ParsedEmail:
         try:
             vals = msg.get_all(hname)
             if vals:
-                auth[hname] = " | ".join(vals)
+                auth[hname] = " | ".join(str(v) for v in vals)
         except Exception:
             pass
     parsed.auth_headers = auth
@@ -140,7 +141,7 @@ def parse_email(raw: bytes | str) -> ParsedEmail:
     # raw headers (string map)
     try:
         for k, v in msg.items():
-            parsed.raw_headers.setdefault(k, v)
+            parsed.raw_headers.setdefault(str(k), str(v))
     except Exception:
         pass
 

@@ -264,6 +264,11 @@ def _risk_donut_chart(risk: dict) -> None:
     weighted = [round(c.get("weighted", 0), 1) for c in components.values()]
     palette = ["#6366f1", "#3b82f6", "#10b981", "#f97316", "#ef4444", "#eab308", "#a855f7"]
 
+    if sum(weighted) == 0:
+        names = ["No Risk (Benign)"]
+        weighted = [1]
+        palette = ["#10b981"]
+
     fig = go.Figure(go.Pie(
         labels=names, values=weighted, hole=0.58,
         marker={"colors": palette[:len(names)]},
